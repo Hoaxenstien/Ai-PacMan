@@ -253,11 +253,18 @@ def manhattanHeuristic(position, problem, info={}):
 
 def euclideanHeuristic(position, problem, info={}):
     "The Euclidean distance heuristic for a PositionSearchProblem"
-    "*** YOUR CODE HERE ***"
+    import math 
+    from math import sqrt
+    
+    goal = problem.goal
+    x1,y1 = position
+    x2,y2 = goal
+    return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
     util.raiseNotDefined()
 
 def randomHeuristic(position, problem, info={}):
-    "*** YOUR CODE HERE ***"
+    import random
+    return random.randint(1,10)
     util.raiseNotDefined()
 
 #####################################################

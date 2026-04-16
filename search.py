@@ -81,22 +81,77 @@ def depthFirstSearch(problem):
     goal. Make sure to implement a graph search algorithm.
 
     To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
+    understand the search problem that is being passed in: """
 
-    print("Start:", problem.getStartState())
+    """print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    """
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))"""
+    
+    front = util.Stack()
+    front.push((problem.getStartState(), [], 0))
+    path = set()
+
+    while not front.isEmpty():
+        state, actions, cost = front.pop()
+
+        if state in path:
+            continue
+        path.add(state)
+
+        if problem.isGoalState(state):
+            return actions
+
+        for nextState, action, stepCost in problem.getSuccessors(state):
+            if nextState not in path:
+                front.push((nextState, actions + [action], cost + stepCost))
+
+    return []
+
+
+
+
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"   
+    front = util.Queue()
+    front.push((problem.getStartState(), [], 0))
+    path = set()
+
+    while not front.isEmpty():
+        state, actions, cost = front.pop()
+
+        if state in path:
+            continue
+        path.add(state)
+
+        if problem.isGoalState(state):
+            return actions
+
+        for nextState, action, stepCost in problem.getSuccessors(state):
+            if nextState not in path:
+                front.push((nextState, actions + [action], cost + stepCost))
+
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+    front = util.PriorityQueue()
+    front.push((problem.getStartState(), [], 0), 0)
+    path = set()
+
+    while not front.isEmpty():
+        state, actions, cost = front.pop()
+        if state in path:
+            continue
+        path.add(state)
+        if problem.isGoalState(state):
+            return actions
+        for nextState, action, stepCost in problem.getSuccessors(state):
+            if nextState not in path:
+                front.push((nextState, actions + [action], cost + stepCost), cost + stepCost)
+        
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -108,7 +163,21 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
+    front = util.PriorityQueue()
+    front.push((problem.getStartState(), [], 0), heuristic(problem.getStartState(), problem))
+    path = set()
+
+    while not front.isEmpty():
+        state, actions, cost = front.pop()
+        if state in path:
+            continue
+        path.add(state)
+        if problem.isGoalState(state):
+            return actions
+        for nextState, action, stepCost in problem.getSuccessors(state):
+            if nextState not in path:
+                new_cost = cost + stepCost
+                front.push((nextState, actions + [action], new_cost), new_cost + heuristic(nextState, problem))
     util.raiseNotDefined()
 
 
